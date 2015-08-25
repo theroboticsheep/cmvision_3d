@@ -24,15 +24,15 @@ class color_controller():
         self.cam_model = PinholeCameraModel()
 
         # We need CameraInfo in order to use PinholeCameraModel below.
-        rospy.Subscriber("camera_topic", CameraInfo, self.camera_callback)
+        rospy.Subscriber('camera_topic', CameraInfo, self.camera_callback)
         self.hasCameraInfo = False
 
         while not self.hasCameraInfo:
-            print "waiting on camera info."
+            print 'waiting on camera info.'
             rospy.sleep(0.5)
 
         # We are using a depth image to get depth information of what we're tracking.
-        rospy.Subscriber("depth_image", Image, self.depth_callback)
+        rospy.Subscriber('depth_image', Image, self.depth_callback)
 
         # This package is just an extension of cmvision to provide tf tracking of the blobs provided by cmvision. 
         rospy.Subscriber('blobs', Blobs, self.blob_callback)
@@ -43,7 +43,7 @@ class color_controller():
         self.broadcaster = tf.TransformBroadcaster()
 
         # Republish each blob as part of a blob.
-        self.blob_pub = rospy.Publisher('/blobs_3d', Blobs3d)
+        self.blob_pub = rospy.Publisher('/blobs_3d', Blobs3d, queue_size=5)
 
         self.publish_tf = publish_tf
 

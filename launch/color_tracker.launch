@@ -1,32 +1,11 @@
 <launch>
-  <arg name="image" default="camera/rgb/image_color"/>
-  <arg name="depth_image" default="camera/depth_registered/image_raw"/>
-  <arg name="camera_topic" default="/camera/rgb/camera_info"/>
+  <include file="$(find cmvision)/launch/cmvision.launch" />
+
+  <!-- arg name="depth_image" default="camera/depth_registered/image_raw"/-->
+  <arg name="depth_image" default="/stereo/left/image_raw"/>
+  <arg name="camera_topic" default="/stereo/left/camera_info"/>
   <!-- Do we want to publish our blobs to tf? -->
   <arg name="publish_tf" default="true"/>
-
-
-  <node name="cmvision" pkg="cmvision" type="cmvision" args="image:=$(arg image)" output="screen">
-    <!-- Location of the cmvision color file -->
-    <param name="color_file" type="string" 
-           value="$(find cmvision_3d)/colors/example.txt" />
-
-    <!-- Turn debug output on or off -->
-    <param name="debug_on" type="bool" value="false"/>
-
-    <!-- Turn color calibration on or off -->
-    <param name="color_cal_on" type="bool" value="false"/>
-
-    <!-- Enable Mean shift filtering -->
-    <param name="mean_shift_on" type="bool" value="true"/>
-
-    <!-- Spatial bandwidth: Bigger = smoother image -->
-    <param name="spatial_radius_pix" type="double" value="2.0"/>
-
-    <!-- Color bandwidth: Bigger = smoother image-->
-    <param name="color_radius_pix" type="double" value="40.0"/>
-  </node>
-
 
   <!-- color_controller conglomerates all the necessary info to publish /blobs_3d and optionally tf transforms for the colors. -->
   <node name="color_controller" pkg="cmvision_3d" type="color_controller.py" output="screen">
